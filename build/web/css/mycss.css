@@ -1,0 +1,8 @@
+.barrage .screen{width:100%;height:100%;position:absolute;top:0px;right:0px;}
+.barrage .screen .mask{position:relative;width:75%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity:1);z-index:1;}
+.barrage{width:100%;height:35%;position: absolute;top:65%;left:0;bottom: 0;}
+.barrage .screen .mask div{position:absolute;font-size:16px;font-weight:bold;white-space:nowrap;line-height:40px;z-index:40;}
+.barrage .send{z-index:1;width:75%;height:55px;background:#000;position:absolute;bottom:0px;left: 0;text-align:center;line-height: 56px;}
+.barrage .send .s_text{width:600px;height:30px;line-height:10px;font-size:16px;font-family:"微软雅黑";color: #000;border-radius: 5px;outline: none;border: none;}
+.barrage .send .s_btn{width:100px;height:30px;background:#22B14C;color:#fff;border: 2px solid rgb(250,194,70);outline: none;border-radius: 8px;cursor: pointer;}
+.close{top:10px;right:10px;position:absolute;text-decoration:none;width:20px;height:20px;border-radius:10px;text-align:center;color:#fff;background:#000;line-height:20px;cursor: pointer;font-size: 80%;z-index: 9999;}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>我爱北京天安门</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9MUD7wxZW9b2PGTTbVrtXWEtFLc2mdwZ"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+        <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+        <script src="js/mapControl.js"></script>
+        <script src="js/loadSeller.js"></script>
+        <script src="js/search.js"></script>
+        <script src="js/LoginServer.js"></script>
+        <script src="js/jquery.star-rating-svg.js"></script>
+        <script src="js/sweet-alert.min.js"></script>
+        <script src="js/detail.js"></script>
+        <link rel="stylesheet" href="css/mapcss.css"/>
+        <link rel="stylesheet" href="css/sweet-alert.css"/>
+        <link rel="stylesheet" href="css/star-rating-svg.css"/>
+        <link rel="stylesheet" href="css/mycss.css"/>
+    </head>
+    <body>
+        <div id="container">
+        </div>
+        <p class="notice">点击地图任意位置进行添加</p>
+        <div id="model"></div>
+        <div id="dialog">
+            确定删除吗？
+            <input type="button" value="确定" style="position: absolute;bottom: 15px;left: 25px;width: 60px;height: 25px;background-color: #FFF;border: 1px solid #ccc;"/>
+            <input type="button" value="取消" style="position: absolute;bottom: 15px;right: 25px;width: 60px;height: 25px;background-color: #FFF;border: 1px solid #ccc;"/>
+        </div>
+        <div id="login">
+            <a class="close">X</a>
+            <div class="upper">
+                <!--                <h3>用户登录</h3>-->
+                <img src="http://upload.wikimedia.org/wikipedia/en/0/0c/Red_Faction_Series_Logo.png" height="80" width="130" alt="logo"/>
+                <form>
+                    <label>用户名<input type="text" name="userName" /><span>用户名为空</span></label>
+                    <label>密码<input type="password" name="pass"  /><span>密码为空</span></label>
+                    <button id="submit" type="button">登录</button>
+                </form>
+            </div>
+            <div class="down">
+                <div class="register" >
+                    注册账户
+                </div>
+                <div class="lostpass">
+                    忘记密码
+                </div>
+            </div>
+        </div>
+        <div id="regis">
+            <div class="upper">
+                <img src="http://upload.wikimedia.org/wikipedia/en/0/0c/Red_Faction_Series_Logo.png" height="80" width="130" alt="logo"/>
+                <form>
+                    <label>用户名<input type="text" placeholder="8-16位数字字母组合" name="userName_reg" /><span>用户名为空</span></label>
+                    <label>密码<input type="password" name="pass_reg"  /><span>密码为空</span></label>
+                    <label>确认密码<input type="password" name="passagain"  /><span></span></label>
+                    <label>真实姓名<input type="text" name="realname"  /><span></span></label>
+                    <label>电子邮箱<input type="email" name="email"  /><span></span></label>
+                    <label>手机号<input type="tel" name="tel"  /><span></span></label> 
+                    <button id="user_register" type="button">注册</button>
+                    <button id="cancel" type="button">取消</button>
+                </form>
+            </div>
+        </div>
+        <div id="input">
+            <div id="title">添加摊位信息</div>
+            <div id="content">
+                售卖物品：<input type="text" name="seller_name" placeholder="请输入售卖物品"/><br/><br/>
+                商品类型：<input type="radio" name="type" value="0" checked="checked" />小吃
+                <input type="radio" name='type' value="1"/>甜品
+                <input type="radio" name="type" value="2"/>工艺品
+                <input type="radio" name="type" value="3"/>水果<br/><br/>
+                详情：<input type="text" name="detail" placeholder="输入详情,小于60字" maxlength="60"/><br/><br/>
+                价格：<input type="text" name="price" ><br/><br/>
+                具体位置：<input type="text" name="location" ><br/><br/>
+                <img id="image" src="" height="90" width="90"/><br/>
+                <input type="file" onchange="selectImage(this);" style="margin:10px auto;border:none !important;">
+                <div id="addbtn" onclick="add_seller()">添加</div><div id="cancelbtn" onclick="hideadd()">取消</div>
+            </div>
+        </div>
+        <div id="userinfo">
+            <div id="info_up">
+                用户信息<a class="close">X</a>
+            </div>
+            <div id="info_mid">
+                <ul>
+                    <li><span>用户名 </span><span id="user_name" style="float: right;"></span></li>
+                    <li><span>真实姓名 </span><input type="text" id="user_realname" /></li>
+                    <li><span>联系电话 </span><input type="tel" id="user_tel" /></li>
+                    <li><span>电子邮箱 </span><input type="email" id="user_email" /></li>
+                </ul>
+            </div>
+            <div id="info_down">
+                <button id="info_save" type="button">修改</button><br/>
+                <button id="info_out" type="button">登出</button>
+            </div>
+        </div>
+        <div id="myadd">
+            <a class="close">X</a>
+            <div id="my_left">
+                <div id="idpart">
+                    <img src="images/2.jpg" width="45%" height="60%" style="border-radius: 60px">
+                </div>
+                <div id="navpart">
+                    <ul>
+                        <li class="active">我的添加</li>
+                        <li>我的评论</li>
+                        <li>附近摊位</li>
+                        <li>我的收藏</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="my_right">
+                <div id="tab_add">
+                    <div class="right_header">
+                        我的添加
+                    </div>
+                    <div class="right_body">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="tab_comment" class="hide">
+                    <div class="right_header">
+                        我的评论
+                    </div>
+                    <div class="right_body">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="tab_near" class="hide">
+                    <div class="right_header">
+                        附近摊位
+                    </div>
+                    <div class="right_body">
+
+                    </div>
+                </div>
+                <div id="tab_store" class="hide">
+                    <div class="right_header">
+                        我的收藏
+                    </div>
+                    <div class="right_body">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="detail">
+            <a class="close">X</a>
+            <div class="sellerinfo">
+                <p style="word-break: break-all;"></p>
+            </div>
+            <div id="imgdiv" style="display:table-cell;text-align:center;vertical-align:middle;height:360px;min-width: 450px">
+                <img src="images/1.jpg" style= "height:100% ;max-width:100%; max-height:360px" />
+            </div>
+            <div id="sellerinfo" class="sellerinfo" >
+                <span style="position: absolute; top:20px;">价格：</span>
+                <span id="price" style="position: absolute; top:20px;left: 80px">￥..</span>
+                <span style="position: absolute; top:60px;">用户评分：</span>
+                <div id="star1" class="my-rating" style="position: absolute;top: 56px;left: 100px;"></div>
+                <span style="position: absolute; top:100px;">我的评分：</span>
+                <div id="star2" class="my-rating" style="position: absolute;top: 96px;left: 100px;"></div>
+                <span style="position: absolute; top:140px;">具体位置：</span>
+                <span id="location" style="position: absolute; top:140px;left: 100px">xx路xx大厦</span>
+                <div id="cellection">❤</div>
+                <div style="position: absolute;top:250px;left: 100px">收藏一下</div>
+            </div>
+            <div class="judgement">
+                <ul>
+                </ul>
+            </div>
+            <div class="barrage">
+                <div class="screen">
+                    <div class="mask">
+                        <!--内容在这里显示-->
+                    </div>
+                </div>
+                <!--Send Begin-->
+                <div class="send">
+                    <input type="text" class="s_text"/>
+                    <input type="button" class="s_btn" value="说两句"/>
+                </div>
+                <!--Send End-->
+            </div>
+        </div>
+        <div id="searchdiv">
+            <a class="close">X</a>
+            <div id="keysearch">
+                <label for='keyinput' >店铺搜索</label><input type="text" placeholder="请输入关键词" id="keyinput"/><input type="button" id="gobtn" value="搜索"/>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="search">
+                <label >类型搜索</label>
+                <select id="typeslc" onchange="searchseller()">
+                    <option value ="%">全部分类</option>
+                    <option value ="0">小吃</option>
+                    <option value ="1">甜品</option>
+                    <option value="2">工艺品</option>
+                    <option value="3">水果</option> 
+                </select>
+            </div>
+            <div class="search">
+                <label >区域搜索</label>
+                <select id="locaslc" onchange="searchseller()">
+                    <option value ="%">全城</option>
+                    <option value ="芙蓉区">芙蓉区</option>
+                    <option value ="天心区">天心区</option>
+                    <option value= "岳麓区">岳麓区</option>
+                    <option value= "雨花区">雨花区</option>
+                    <option value= "望城区">望城区</option>
+                    <option value= "开福区">开福区</option>
+                </select>
+            </div>
+            <div id="disp">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                var nav_li_ = $('#navpart').find('li');
+                var div_li_ = $('.my_right > div');
+                for (var i = 0; i < nav_li_.length; i++) {
+                    nav_li_[i].index = i;
+                    nav_li_[i].onclick = function () {
+                        for (var j = 0; j < nav_li_.length; j++) {
+                            nav_li_[j].className = "";
+                            div_li_[j].className = "hide";
+                        }
+                        nav_li_[this.index].className = "active";
+                        div_li_[this.index].className = "";
+                    }
+                }
+            });
+//初始化弹幕技术
+            function init_barrage() {
+                var _top = 0;
+                if ($(".mask").width() >= 100) {
+                    $(".mask div").each(function () {
+                        var _left = $(".mask").width() - $(this).width(); //浏览器最大宽度，作为定位left的值
+                        var _height = $(".barrage").height(); //浏览器最大高度
+                        _top += 12;
+                        if (_top >= (_height - 65)) {
+                            _top = 0;
+                        }
+                        $(this).css({left: _left, top: _top, color: getRandomColor()}).show(); //定时弹出文字
+                        var time = 8000;
+                        if ($(this).index() % 2 === 0) {
+                            time = 10000;
+                        }
+                        $(this).animate({left: "-" + _left + "px"}, time, function () {
+                            $(this).css({left: _left, top: _top}).hide();
+                        });
+                    });
+                }else{
+                    setTimeout(init_barrage,500);
+                }
+            }
+////获取随机颜色
+            function getRandomColor() {
+                return '#' + (function (h) {
+                    return new Array(7 - h.length).join("0") + h
+                }
+                )((Math.random() * 0x1000000 << 0).toString(16))
+            }
+            function uploadcomment() {
+                var text = $(".s_text").val();
+                if (text === "") {
+                    return;
+                }
+                $.ajax({
+                    url: "CommentServer",
+                    type: "POST",
+                    data: {
+                        sellername: sessionStorage.getItem("INFO_NAME"),
+                        username: localStorage.getItem("USER_NAME"),
+                        comment: text,
+                        type: "UPLOAD_COMMENT"
+                    },
+                    success: function (data) {
+                        var jsondata = JSON.parse(data);
+                        if (jsondata.success) {
+                            var _lable = $("<div style='right:20px;top:0px;opacity:1;color:#fff;'>" + text + "</div>");
+                            var _li = $("<li><p><b>" + localStorage.getItem("USER_NAME") + ":</b>" + text + "</p></li>");
+                            $(".mask").append(_lable.hide());
+                            var li_ = $(".judgement ul li");
+                            if(li_[0]){
+                                $(".judgement ul").append(_li);
+                                $(".mask").append(_lable);
+                            }else{
+                                $(".judgement ul").html("").append(_li);
+                            }
+                        } else {
+                            swal("评论失败!");
+                        }
+                    },
+                    error: function () {
+                        swal("网络故障");
+                    }
+                });
+                $(".s_text").val("");
+            }
+
+        </script>
+
+        <script>
+            var image = '';
+            function selectImage(file) {
+                if (!file.files || !file.files[0]) {
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    $('#image')[0].src = evt.target.result;
+                    image = evt.target.result;
+                };
+                reader.readAsDataURL(file.files[0]);
+            }
+//            function uploadImage() {
+//                $.ajax({
+//                    type: 'POST',
+//                    url: 'UploadServer',
+//                    data: {image: image},
+//                    async: false,
+//                    dataType: 'json',
+//                    success: function (data) {
+//                        if (data.success) {
+//                            alert("上传成功");
+//                        } else {
+//                            alert("上传失败,请确认图片为jpg格式");
+//                        }
+//                    },
+//                    error: function (err) {
+//                        alert('网络故障');
+//                    }
+//                });
+//            }
+
+        </script>
+    </body>
+
+</html>
